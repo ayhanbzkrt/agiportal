@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGI Geleceği: Hayal vs Gerçeklik - İnteraktif Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #1e293b;
+            --accent-color: #06b6d4;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        .light-theme {
+            --primary-color: #ffffff;
+            --secondary-color: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--primary-color);
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            backdrop-filter: blur(20px);
+            z-index: -1;
+            opacity: 0.95;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            color: var(--accent-color);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-color);
+            border-radius: 1px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle, .lang-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle:hover, .lang-toggle:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floating Elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 30%; left: 70%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-link:hover {
+            transform: translateX(5px);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-3);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:nth-child(even) {
+            transform: translateX(50px);
+        }
+
+        .timeline-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .timeline-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 45%;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: 55%;
+        }
+
+        .timeline-date {
+            background: var(--gradient-3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* References */
+        .references-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .reference-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .reference-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-color);
+        }
+
+        .reference-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .comparison-table th {
+            background: var(--secondary-color);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--glass-bg);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary-color);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-author {
+            color: var(--text-primary);
+            margin-top: 2rem;
+        }
+
+        .footer-author a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-author a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 3px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .control-buttons {
+                gap: 0.5rem;
+            }
+
+            .theme-toggle, .lang-toggle {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+            }
+
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 60px !important;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.7rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0891b2;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--gradient-3);
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Hidden class for language switching */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="glass-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span data-tr="AGI Portal" data-en="AGI Portal">AGI Portal</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+                <li><a href="#introduction" class="nav-link" data-tr="Giriş" data-en="Introduction">Giriş</a></li>
+                <li><a href="#current-state" class="nav-link" data-tr="Mevcut Durum" data-en="Current State">Mevcut Durum</a></li>
+                <li><a href="#pathways" class="nav-link" data-tr="Yollar" data-en="Pathways">Yollar</a></li>
+                <li><a href="#timeline" class="nav-link" data-tr="Zaman Çizelgesi" data-en="Timeline">Zaman Çizelgesi</a></li>
+                <li><a href="#impacts" class="nav-link" data-tr="Etkiler" data-en="Impacts">Etkiler</a></li>
+                <li><a href="#recommendations" class="nav-link" data-tr="Öneriler" data-en="Recommendations">Öneriler</a></li>
+                <li><a href="#references" class="nav-link" data-tr="Kaynaklar" data-en="References">Kaynaklar</a></li>
+            </ul>
+
+            <div class="control-buttons">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="lang-toggle" id="langToggle">
+                    <span id="langText">EN</span>
+                </button>
+                <div class="mobile-menu-toggle" id="mobileToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span data-tr="Yapay Genel Zeka'nın Geleceği" data-en="The Future of Artificial General Intelligence">Yapay Genel Zeka'nın Geleceği</span>
+            </h1>
+            <h2 class="hero-subtitle">
+                <span data-tr="Hayal vs Gerçeklik" data-en="Hype vs Reality">Hayal vs Gerçeklik</span>
+            </h2>
+            <p class="hero-description">
+                <span data-tr="Bu interaktif portal, Yapay Genel Zeka'nın (AGI) mevcut durumunu, gelecekteki potansiyelini ve toplumsal etkilerini kapsamlı bir şekilde analiz eder. Bilimsel gerçekler ışığında, hype'ı realiteden ayırarak geleceğe dair objektif bir bakış açısı sunar." data-en="This interactive portal comprehensively analyzes the current state, future potential, and societal impacts of Artificial General Intelligence (AGI). Based on scientific facts, it offers an objective perspective on the future by separating hype from reality.">Bu interaktif portal, Yapay Genel Zeka'nın (AGI) mevcut durumunu, gelecekteki potansiyelini ve toplumsal etkilerini kapsamlı bir şekilde analiz eder. Bilimsel gerçekler ışığında, hype'ı realiteden ayırarak geleceğe dair objektif bir bakış açısı sunar.</span>
+            </p>
+            <div class="cta-buttons">
+                <a href="#introduction" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    <span data-tr="Keşfetmeye Başla" data-en="Start Exploring">Keşfetmeye Başla</span>
+                </a>
+                <a href="#references" class="btn btn-secondary">
+                    <i class="fas fa-book"></i>
+                    <span data-tr="Kaynakları İncele" data-en="View References">Kaynakları İncele</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Summary -->
+    <section id="summary" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="Yönetici Özeti" data-en="Executive Summary">Yönetici Özeti</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="AGI'nin mevcut durumu ve gelecekteki potansiyeli hakkında kapsamlı bir değerlendirme" data-en="A comprehensive assessment of AGI's current state and future potential">AGI'nin mevcut durumu ve gelecekteki potansiyeli hakkında kapsamlı bir değerlendirme</span>
+            </p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="AGI Nedir?" data-en="What is AGI?">AGI Nedir?</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Yapay Genel Zeka, bir insanın yapabileceği herhangi bir entelektüel görevi yerine getirebilen hipotetik bir makine zekası türüdür. Şu anda mevcut değildir." data-en="Artificial General Intelligence is a hypothetical type of machine intelligence capable of performing any intellectual task that a human can. It does not currently exist.">Yapay Genel Zeka, bir insanın yapabileceği herhangi bir entelektüel görevi yerine getirebilen hipotetik bir makine zekası türüdür. Şu anda mevcut değildir.</span>
+                </p>
+                <a href="#introduction" class="card-link">
+                    <span data-tr="Detayları Öğren" data-en="Learn More">Detayları Öğren</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Mevcut Durum" data-en="Current State">Mevcut Durum</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Günümüzde Dar Yapay Zeka (ANI) sistemleri belirli görevlerde üstün performans sergilerken, gerçek AGI henüz teorik bir hedef olarak kalır." data-en="Today's Artificial Narrow Intelligence (ANI) systems excel at specific tasks, while true AGI remains a theoretical goal.">Günümüzde Dar Yapay Zeka (ANI) sistemleri belirli görevlerde üstün performans sergilerken, gerçek AGI henüz teorik bir hedef olarak kalır.</span>
+                </p>
+                <a href="#current-state" class="card-link">
+                    <span data-tr="Analizi İncele" data-en="View Analysis">Analizi İncele</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Fırsatlar ve Riskler" data-en="Opportunities and Risks">Fırsatlar ve Riskler</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, sağlık, eğitim ve bilimde devrimler yaratabilirken, varoluşsal riskler ve sosyo-ekonomik yıkımlar da getirebilir." data-en="AGI could revolutionize healthcare, education, and science, while also bringing existential risks and socio-economic disruptions.">AGI, sağlık, eğitim ve bilimde devrimler yaratabilirken, varoluşsal riskler ve sosyo-ekonomik yıkımlar da getirebilir.</span>
+                </p>
+                <a href="#impacts" class="card-link">
+                    <span data-tr="Etkileri Keşfet" data-en="Explore Impacts">Etkileri Keşfet</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">2040-2061</div>
+                <div class="stat-label">
+                    <span data-tr="Uzman Tahminleri (Medyan)" data-en="Expert Predictions (Median)">Uzman Tahminleri (Medyan)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">78%</div>
+                <div class="stat-label">
+                    <span data-tr="İşletmelerde AI Kullanımı (2024)" data-en="AI Usage in Business (2024)">İşletmelerde AI Kullanımı (2024)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">223</div>
+                <div class="stat-label">
+                    <span data-tr="FDA Onaylı AI Tıbbi Cihaz (2023)" data-en="FDA Approved AI Medical Devices (2023)">FDA Onaylı AI Tıbbi Cihaz (2023)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$33.9B</div>
+                <div class="stat-label">
+                    <span data-tr="Üretken AI Yatırımları (2024)" data-en="Generative AI Investments (2024)">Üretken AI Yatırımları (2024)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section id="introduction" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="AGI Manzarasında Gezinmek" data-en="Navigating the AGI Landscape">AGI Manzarasında Gezinmek</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Yapay Genel Zeka hakkındaki söylemler genellikle ateşli iyimserlik ve derin endişe karışımıyla karakterize edilir." data-en="The discourse around Artificial General Intelligence is often characterized by a blend of fervent optimism and profound apprehension.">Yapay Genel Zeka hakkındaki söylemler genellikle ateşli iyimserlik ve derin endişe karışımıyla karakterize edilir.</span>
+            </p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="AGI Tanımı" data-en="Defining AGI">AGI Tanımı</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, güçlü AI, tam AI, insan seviyesinde AI veya genel akıllı eylem olarak da bilinir. Bir insanın başarabileceği herhangi bir entelektüel görevi yerine getirebilen hipotetik makine zekasını ifade eder." data-en="AGI, also known as strong AI, full AI, human-level AI, or general intelligent action, refers to hypothetical machine intelligence that could perform any intellectual task a human can accomplish.">AGI, güçlü AI, tam AI, insan seviyesinde AI veya genel akıllı eylem olarak da bilinir. Bir insanın başarabileceği herhangi bir entelektüel görevi yerine getirebilen hipotetik makine zekasını ifade eder.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="ANI vs AGI" data-en="ANI vs AGI">ANI vs AGI</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Dar Yapay Zeka (ANI) belirli görevlerde uzmanlaşırken, AGI çok çeşitli alanlarda genelleme yapabilir. GPT-4 ve AlphaZero gibi gelişmiş sistemler bile ANI kategorisindedir." data-en="While Artificial Narrow Intelligence (ANI) specializes in specific tasks, AGI would be capable of generalizing across diverse domains. Even advanced systems like GPT-4 and AlphaZero fall under the ANI category.">Dar Yapay Zeka (ANI) belirli görevlerde uzmanlaşırken, AGI çok çeşitli alanlarda genelleme yapabilir. GPT-4 ve AlphaZero gibi gelişmiş sistemler bile ANI kategorisindedir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Hype Döngüsü" data-en="The Hype Cycle">Hype Döngüsü</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI konsepti genellikle yoğun duygusal tepkiler ve gelişimine dair çok farklı tahminlerle birlikte gelir. Bu durum AGI çevresindeki yaygın hype'a önemli ölçüde katkıda bulunur." data-en="The concept of AGI is often accompanied by intense emotional responses and wildly varying predictions regarding its timeline. This contributes significantly to the pervasive hype surrounding AGI.">AGI konsepti genellikle yoğun duygusal tepkiler ve gelişimine dair çok farklı tahminlerle birlikte gelir. Bu durum AGI çevresindeki yaygın hype'a önemli ölçüde katkıda bulunur.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <h3 style="text-align: center; margin: 3rem 0 2rem; font-size: 2rem; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <span data-tr="AGI vs Dar AI: Fonksiyonel Karşılaştırma" data-en="AGI vs Narrow AI: Functional Comparison">AGI vs Dar AI: Fonksiyonel Karşılaştırma</span>
+        </h3>
+        
+        <div style="overflow-x: auto;">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th><span data-tr="Özellik" data-en="Characteristic">Özellik</span></th>
+                        <th><span data-tr="Dar AI (ANI)" data-en="Narrow AI (ANI)">Dar AI (ANI)</span></th>
+                        <th><span data-tr="Yapay Genel Zeka (AGI)" data-en="Artificial General Intelligence (AGI)">Yapay Genel Zeka (AGI)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong><span data-tr="Tanım" data-en="Definition">Tanım</span></strong></td>
+                        <td><span data-tr="Belirli görevleri yerine getirir; tek amaç için tasarlanmıştır" data-en="Performs specific tasks; designed for a single purpose">Belirli görevleri yerine getirir; tek amaç için tasarlanmıştır</span></td>
+                        <td><span data-tr="İnsan benzeri zeka; bir insanın yapabileceği herhangi bir entelektüel görevi yerine getirebilir" data-en="Human-like intelligence; capable of performing any intellectual task a human can">İnsan benzeri zeka; bir insanın yapabileceği herhangi bir entelektüel görevi yerine getirebilir</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong><span data-tr="Kapsam" data-en="Scope">Kapsam</span></strong></td>
+                        <td><span data-tr="Belirli bir alan veya görevle sınırlı" data-en="Limited to a specific domain or task">Belirli bir alan veya görevle sınırlı</span></td>
+                        <td><span data-tr="Geniş, entelektüel görevlerde evrensel" data-en="Broad, universal across intellectual tasks">Geniş, entelektüel görevlerde evrensel</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong><span data-tr="Uyum Sağlama" data-en="Adaptability">Uyum Sağlama</span></strong></td>
+                        <td><span data-tr="Sınırlı; tanıdık olmayan durumlarla mücadele eder" data-en="Limited; struggles with unfamiliar situations">Sınırlı; tanıdık olmayan durumlarla mücadele eder</span></td>
+                        <td><span data-tr="Yüksek; yeni ve görülmemiş durumlara etkili şekilde adapte olur" data-en="High; adapts to new and unseen situations effectively">Yüksek; yeni ve görülmemiş durumlara etkili şekilde adapte olur</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong><span data-tr="Genelleme" data-en="Generalization">Genelleme</span></strong></td>
+                        <td><span data-tr="Eğitim verilerinin ötesinde genelleme yapmaz" data-en="No generalization beyond training data">Eğitim verilerinin ötesinde genelleme yapmaz</span></td>
+                        <td><span data-tr="Bilgiyi genelleştirir ve becerileri farklı alanlara aktarır" data-en="Generalizes knowledge and transfers skills across domains">Bilgiyi genelleştirir ve becerileri farklı alanlara aktarır</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong><span data-tr="Mevcut Durum" data-en="Current Status">Mevcut Durum</span></strong></td>
+                        <td><span data-tr="Var, yaygın olarak dağıtılmış ve sürekli gelişmekte" data-en="Exists, widely deployed, and continuously improving">Var, yaygın olarak dağıtılmış ve sürekli gelişmekte</span></td>
+                        <td><span data-tr="Mevcut değil; teorik bir hedef olarak kalır" data-en="Does not exist; remains a theoretical goal">Mevcut değil; teorik bir hedef olarak kalır</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Current State -->
+    <section id="current-state" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="AI'nin Mevcut Durumu" data-en="The Current State of AI">AI'nin Mevcut Durumu</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Dar Yapay Zeka'daki hızlı ilerlemeler şüphesiz endüstrileri ve günlük yaşamı yeniden şekillendirdi" data-en="The rapid advancements in Artificial Narrow Intelligence have undeniably reshaped industries and daily life">Dar Yapay Zeka'daki hızlı ilerlemeler şüphesiz endüstrileri ve günlük yaşamı yeniden şekillendirdi</span>
+            </p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="ANI Başarıları" data-en="ANI Achievements">ANI Başarıları</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Zayıf AI, çok spesifik görevleri tamamlamada olağanüstü performans sergiledi ve genellikle tasarlandığı alan içinde insan yeteneklerini aştı. 2024'te 78% organizasyon AI kullanımı bildirdi." data-en="Weak AI has demonstrated exceptional performance in completing very specific tasks, often surpassing human capabilities within its designed domain. 78% of organizations reported AI usage in 2024.">Zayıf AI, çok spesifik görevleri tamamlamada olağanüstü performans sergiledi ve genellikle tasarlandığı alan içinde insan yeteneklerini aştı. 2024'te 78% organizasyon AI kullanımı bildirdi.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Mevcut Sınırlamalar" data-en="Current Limitations">Mevcut Sınırlamalar</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Bu etkileyici başarılara rağmen, mevcut ANI sistemleri AGI'yi önleyen temel sınırlamalarla karşı karşıyadır. Özellikle genelleme ve transfer öğrenme yeteneklerinde eksiklikler bulunur." data-en="Despite these impressive achievements, current ANI systems face fundamental limitations that prevent them from achieving AGI. Particularly lacking in generalization and transfer learning capabilities.">Bu etkileyici başarılara rağmen, mevcut ANI sistemleri AGI'yi önleyen temel sınırlamalarla karşı karşıyadır. Özellikle genelleme ve transfer öğrenme yeteneklerinde eksiklikler bulunur.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Gerçek vs Algı" data-en="Reality vs Perception">Gerçek vs Algı</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Mevcut AI'nin algılanan ve gerçek yetenekleri arasında çarpıcı bir fark var. Geliştiriciler AI araçlarından %24 hızlanma beklerken %19 yavaşlama yaşadılar, ancak yine de AI'nin işlerini hızlandırdığına inanıyorlardı." data-en="There's a striking gap between perceived and actual capabilities of current AI. Developers expected 24% speedup from AI tools but experienced 19% slowdown, yet still believed AI accelerated their work.">Mevcut AI'nin algılanan ve gerçek yetenekleri arasında çarpıcı bir fark var. Geliştiriciler AI araçlarından %24 hızlanma beklerken %19 yavaşlama yaşadılar, ancak yine de AI'nin işlerini hızlandırdığına inanıyorlardı.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">150K</div>
+                <div class="stat-label">
+                    <span data-tr="Waymo Haftalık Otonom Yolculuk" data-en="Waymo Weekly Autonomous Rides">Waymo Haftalık Otonom Yolculuk</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">223</div>
+                <div class="stat-label">
+                    <span data-tr="FDA Onaylı AI Tıbbi Cihaz (2023)" data-en="FDA Approved AI Medical Devices (2023)">FDA Onaylı AI Tıbbi Cihaz (2023)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">18.7%</div>
+                <div class="stat-label">
+                    <span data-tr="Üretken AI Yatırım Artışı (2024)" data-en="Generative AI Investment Growth (2024)">Üretken AI Yatırım Artışı (2024)</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">55→78%</div>
+                <div class="stat-label">
+                    <span data-tr="İşletmelerde AI Benimsenme Artışı" data-en="Business AI Adoption Growth">İşletmelerde AI Benimsenme Artışı</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pathways to AGI -->
+    <section id="pathways" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="AGI'ye Giden Yollar" data-en="Pathways to AGI">AGI'ye Giden Yollar</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Yapay Genel Zeka arayışı, her biri insan seviyesindeki bilişin karmaşıklığını çözmeye çalışan çeşitli araştırma metodolojilerini içerir" data-en="The pursuit of Artificial General Intelligence involves diverse research methodologies, each attempting to unravel the complexities of human-level cognition">Yapay Genel Zeka arayışı, her biri insan seviyesindeki bilişin karmaşıklığını çözmeye çalışan çeşitli araştırma metodolojilerini içerir</span>
+            </p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-sitemap"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Sembolik AI" data-en="Symbolic AI">Sembolik AI</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Bu yaklaşım, AGI'nin genişletilmiş mantık ağları aracılığıyla insan düşüncelerini temsil ederek elde edilebileceğini öne sürer. 'Eğer-o zaman' mantığı kullanarak AI sistemlerinin fikirleri daha yüksek bilişsel düzeyde yorumlamasını sağlar." data-en="This approach posits that AGI can be achieved by representing human thoughts through expanding logic networks. It uses 'if-then' logic to enable AI systems to interpret ideas at a higher cognitive level.">Bu yaklaşım, AGI'nin genişletilmiş mantık ağları aracılığıyla insan düşüncelerini temsil ederek elde edilebileceğini öne sürer. 'Eğer-o zaman' mantığı kullanarak AI sistemlerinin fikirleri daha yüksek bilişsel düzeyde yorumlamasını sağlar.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Bağlantıcı Yaklaşım" data-en="Connectionist Approach">Bağlantıcı Yaklaşım</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Bu metodoloji, sinir ağı mimarileri kullanarak insan beyninin yapısını ve işlevini kopyalamaya odaklanır. Büyük Dil Modelleri (LLM'ler) bu yaklaşımla inşa edilen sistemlerin başlıca örnekleridir." data-en="This methodology focuses on replicating the structure and function of the human brain using neural network architectures. Large Language Models (LLMs) are prime examples of systems built on this approach.">Bu metodoloji, sinir ağı mimarileri kullanarak insan beyninin yapısını ve işlevini kopyalamaya odaklanır. Büyük Dil Modelleri (LLM'ler) bu yaklaşımla inşa edilen sistemlerin başlıca örnekleridir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Hibrit Yaklaşım" data-en="Hybrid Approach">Hibrit Yaklaşım</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Nöro-sembolik AI olarak da adlandırılan bu yaklaşım, hem sinir ağı hem de sembolik AI mimarilerini entegre eder. İstatistiksel AI'nin güçlü yanlarını insan benzeri sembolik bilgi ve akıl yürütme yetenekleriyle birleştirmeyi amaçlar." data-en="Often termed Neuro-symbolic AI, this approach integrates both neural and symbolic AI architectures. It aims to combine the strengths of statistical AI with human-like symbolic knowledge and reasoning capabilities.">Nöro-sembolik AI olarak da adlandırılan bu yaklaşım, hem sinir ağı hem de sembolik AI mimarilerini entegre eder. İstatistiksel AI'nin güçlü yanlarını insan benzeri sembolik bilgi ve akıl yürütme yetenekleriyle birleştirmeyi amaçlar.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Tam Organizma Mimarisi" data-en="Whole Organism Architecture">Tam Organizma Mimarisi</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Bu teori, AGI'nin yalnızca sistem bir ortam içinde fiziksel etkileşimler yoluyla öğrendiğinde tam olarak elde edilebileceğini öne sürer. AI modellerinin insan vücudunun fiziksel temsiliyle entegrasyonunu gerektirir." data-en="This theory suggests that AGI is only fully achievable when the system learns through physical interactions within an environment. It necessitates the integration of AI models with a physical representation of the human body.">Bu teori, AGI'nin yalnızca sistem bir ortam içinde fiziksel etkileşimler yoluyla öğrendiğinde tam olarak elde edilebileceğini öne sürer. AI modellerinin insan vücudunun fiziksel temsiliyle entegrasyonunu gerektirir.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 4rem;">
+            <h3 style="font-size: 2rem; background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;">
+                <span data-tr="Önemli Araştırma Atılımları" data-en="Key Research Breakthroughs">Önemli Araştırma Atılımları</span>
+            </h3>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Modern LLM'ler" data-en="Modern LLMs">Modern LLM'ler</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Modern Büyük Dil Modelleri, desen tanıma, yaratıcı içgörüler üretme ve ses, görü ve metin dahil çeşitli modaliteler arasında gerçek zamanlı akıl yürütme konularında önemli ölçüde gelişmiş yetenekler sergilemişlerdir." data-en="Modern Large Language Models have demonstrated significantly improved abilities in pattern recognition, generating creative insights, and performing real-time reasoning across various modalities including audio, vision, and text.">Modern Büyük Dil Modelleri, desen tanıma, yaratıcı içgörüler üretme ve ses, görü ve metin dahil çeşitli modaliteler arasında gerçek zamanlı akıl yürütme konularında önemli ölçüde gelişmiş yetenekler sergilemişlerdir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Küresel Araştırma" data-en="Global Research">Küresel Araştırma</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AI modellerinin geliştirilmesi giderek küresel bir çaba haline geliyor. 2020 anketinde 37 ülkede 72 aktif AGI araştırma ve geliştirme projesi tespit edildi. ABD önemli AI modelleri üretiminde lider olmaya devam ederken, Çin hızla kalite açığını kapatıyor." data-en="The development of AI models is increasingly a global endeavor. A 2020 survey identified 72 active AGI research and development projects spanning 37 countries. While the US leads in notable AI model production, China is rapidly narrowing the quality gap.">AI modellerinin geliştirilmesi giderek küresel bir çaba haline geliyor. 2020 anketinde 37 ülkede 72 aktif AGI araştırma ve geliştirme projesi tespit edildi. ABD önemli AI modeller üretiminde lider olmaya devam ederken, Çin hızla kalite açığını kapatıyor.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section id="timeline" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="AGI Zaman Çizelgesi" data-en="The AGI Timeline">AGI Zaman Çizelgesi</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Yapay Genel Zeka'nın ne zaman ortaya çıkabileceği sorusu, AI söyleminin en tartışmalı ve spekülatif yönlerinden biridir" data-en="The question of when Artificial General Intelligence might emerge is one of the most contentious and speculative aspects of the AI discourse">Yapay Genel Zeka'nın ne zaman ortaya çıkabileceği sorusu, AI söyleminin en tartışmalı ve spekülatif yönlerinden biridir</span>
+            </p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <span data-tr="2025-2028" data-en="2025-2028">2025-2028</span>
+                    </div>
+                    <h3 class="timeline-title">
+                        <span data-tr="İyimser Endüstri Tahminleri" data-en="Optimistic Industry Predictions">İyimser Endüstri Tahminleri</span>
+                    </h3>
+                    <p class="timeline-description">
+                        <span data-tr="Elon Musk AGI'yi 2025'te, ASI'yi 2027'de öngörüyor. Dario Amodei (Anthropic CEO'su) ve Masayoshi Son 2-3 yıl içinde AGI'yi tahmin ediyorlar. Jensen Huang (Nvidia CEO'su) AI'nin 5 yıl içinde herhangi bir testte insan performansını eşitleyeceğini veya aşacağını öngörüyor." data-en="Elon Musk predicts AGI by 2025 and ASI by 2027. Dario Amodei (Anthropic CEO) and Masayoshi Son forecast AGI within 2-3 years. Jensen Huang (Nvidia CEO) predicts AI will match or surpass human performance on any test within 5 years.">Elon Musk AGI'yi 2025'te, ASI'yi 2027'de öngörüyor. Dario Amodei (Anthropic CEO'su) ve Masayoshi Son 2-3 yıl içinde AGI'yi tahmin ediyorlar. Jensen Huang (Nvidia CEO'su) AI'nin 5 yıl içinde herhangi bir testte insan performansını eşitleyeceğini veya aşacağını öngörüyor.</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <span data-tr="2040-2061" data-en="2040-2061">2040-2061</span>
+                    </div>
+                    <h3 class="timeline-title">
+                        <span data-tr="Akademik Konsensüs" data-en="Academic Consensus">Akademik Konsensüs</span>
+                    </h3>
+                    <p class="timeline-description">
+                        <span data-tr="AI araştırmacılarının anketleri, AGI'nin %50 olasılıkla 2040-2061 arasında başarılacağı yönünde medyan tahmin gösteriyor. 2022'de yapılan bir ankette katılımcıların %90'ı AGI'nin 100 yıl içinde, yarısı ise 2061'e kadar beklediğini belirtti." data-en="Surveys of AI researchers indicate a median forecast of AGI achieving a 50% probability between 2040 and 2061. A 2022 survey found that 90% of respondents expected AGI within 100 years, and half by 2061.">AI araştırmacılarının anketleri, AGI'nin %50 olasılıkla 2040-2061 arasında başarılacağı yönünde medyan tahmin gösteriyor. 2022'de yapılan bir ankette katılımcıların %90'ı AGI'nin 100 yıl içinde, yarısı ise 2061'e kadar beklediğini belirtti.</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <span data-tr="Asla?" data-en="Never?">Asla?</span>
+                    </div>
+                    <h3 class="timeline-title">
+                        <span data-tr="Şüpheci Görüşler" data-en="Skeptical Views">Şüpheci Görüşler</span>
+                    </h3>
+                    <p class="timeline-description">
+                        <span data-tr="Gary Marcus gibi eleştirmenler, mevcut derin öğrenme yaklaşımlarının temel kusurları olduğunu ve teorik atılımlar olmadan AGI'ye ulaştıramayacağını savunuyorlar. AI araştırmacılarının %76'sı 'mevcut AI yaklaşımlarını ölçeklendirmenin' AGI'yi getirmesinin 'olası değil' veya 'çok olası değil' olduğunu belirtiyor." data-en="Critics like Gary Marcus argue that existing deep learning approaches have fundamental flaws and cannot lead to AGI without theoretical breakthroughs. 76% of AI researchers assert that 'scaling up current AI approaches' to yield AGI is 'unlikely' or 'very unlikely'.">Gary Marcus gibi eleştirmenler, mevcut derin öğrenme yaklaşımlarının temel kusurları olduğunu ve teorik atılımlar olmadan AGI'ye ulaştıramayacağını savunuyorlar. AI araştırmacılarının %76'sı 'mevcut AI yaklaşımlarını ölçeklendirmenin' AGI'yi getirmesinin 'olası değil' veya 'çok olası değil' olduğunu belirtiyor.</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <div class="timeline-date">
+                        <span data-tr="Belirsizlik" data-en="Uncertainty">Belirsizlik</span>
+                    </div>
+                    <h3 class="timeline-title">
+                        <span data-tr="Tahmin Zorluğu" data-en="Prediction Challenges">Tahmin Zorluğu</span>
+                    </h3>
+                    <p class="timeline-description">
+                        <span data-tr="AGI'ye ulaşmanın kesin yöntemi hakkında henüz bilimsel konsensüs yok. Araştırmacılar sadece zaman çizelgelerinde değil, AGI'yi başarmanın temel metodolojilerinde de farklılık gösteriyor. Bu durum kolektif ilerlemeyi engelliyor." data-en="There is not yet scientific consensus on the precise method to achieve AGI. Researchers differ not only on timelines but also on fundamental methodologies for achieving AGI, hampering collective progress.">AGI'ye ulaşmanın kesin yöntemi hakkında henüz bilimsel konsensüs yok. Araştırmacılar sadece zaman çizelgelerinde değil, AGI'yi başarmanın temel metodolojilerinde de farklılık gösteriyor. Bu durum kolektif ilerlemeyi engelliyor.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 4rem;">
+            <h3 style="font-size: 2rem; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;">
+                <span data-tr="Tahminleri Etkileyen Faktörler" data-en="Factors Influencing Predictions">Tahminleri Etkileyen Faktörler</span>
+            </h3>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="İyimser Projeksiyonlar" data-en="Optimistic Projections">İyimser Projeksiyonlar</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Hesaplama ve bellek kapasitesinin üstel büyümesi, algoritmik ilerlemeler ve öz-gelişim potansiyeli gibi faktörler iyimser tahminleri destekler. İnsan zekası sabitken, makine zekası algoritma, işlem gücü ve belleğe bağlıdır." data-en="Factors like exponential growth of compute and memory, algorithmic advancements, and self-improvement potential support optimistic forecasts. Human intelligence is fixed, while machine intelligence depends on algorithms, processing power, and memory.">Hesaplama ve bellek kapasitesinin üstel büyümesi, algoritmik ilerlemeler ve öz-gelişim potansiyeli gibi faktörler iyimser tahminleri destekler. İnsan zekası sabitken, makine zekası algoritma, işlem gücü ve belleğe bağlıdır.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Şüpheci Projeksiyonlar" data-en="Skeptical Projections">Şüpheci Projeksiyonlar</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Teknik engeller, konsensüs eksikliği ve mevcut paradigmalardaki temel kusurlar şüpheci tahminlerin temelini oluşturur. AGI geliştirme muazzam hesaplama kaynakları, gelişmiş donanımdan yenilikçi algoritmalara kadar gerektirir." data-en="Technical hurdles, lack of consensus, and fundamental flaws in current paradigms ground skeptical projections. AGI development demands immense computational resources, from advanced hardware to innovative algorithms.">Teknik engeller, konsensüs eksikliği ve mevcut paradigmalardaki temel kusurlar şüpheci tahminlerin temelini oluşturur. AGI geliştirme muazzam hesaplama kaynakları, gelişmiş donanımdan yenilikçi algoritmalara kadar gerektirir.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impacts -->
+    <section id="impacts" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="AGI'nin Potansiyel Etkileri" data-en="Potential Impacts of AGI">AGI'nin Potansiyel Etkileri</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Yapay Genel Zeka'nın ortaya çıkışı, insanlığın en acil sorunlarını ele alma konusunda muazzam fırsatlar sunarken, dikkatli değerlendirme ve proaktif azaltma gerektiren derin riskler de barındırır" data-en="The advent of Artificial General Intelligence holds potential for unprecedented societal transformation, presenting both immense opportunities and profound risks">Yapay Genel Zeka'nın ortaya çıkışı, insanlığın en acil sorunlarını ele alma konusunda muazzam fırsatlar sunarken, dikkatli değerlendirme ve proaktif azaltma gerektiren derin riskler de barındırır</span>
+            </p>
+        </div>
+
+        <div class="section-header">
+            <h3 style="font-size: 2rem; background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;">
+                <span data-tr="Dönüştürücü Fırsatlar" data-en="Transformative Opportunities">Dönüştürücü Fırsatlar</span>
+            </h3>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Sağlık" data-en="Healthcare">Sağlık</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, tanı, tedavi planlama ve ilaç keşfinde devrim yaratma potansiyeline sahiptir. Karmaşık analizi otomatikleştirerek, Antarktika buzdağı değişikliklerini insandan binlerce kat daha hızlı haritalayarak çevresel izlemeyi neredeyse gerçek zamanlı hale getirebilir." data-en="AGI holds the potential to revolutionize diagnosis, treatment planning, and drug discovery. It could automate complex analysis, mapping Antarctic iceberg changes thousands of times faster than humans, enabling near-real-time environmental monitoring.">AGI, tanı, tedavi planlama ve ilaç keşfinde devrim yaratma potansiyeline sahiptir. Karmaşık analizi otomatikleştirerek, Antarktika buzdağı değişikliklerini insandan binlerce kat daha hızlı haritalayarak çevresel izlemeyi neredeyse gerçek zamanlı hale getirebilir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Eğitim" data-en="Education">Eğitim</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, her öğrenci için gerçek zamanlı olarak öğrenme deneyimlerini kişiselleştirebilir. Öğrencileri problemler boyunca rehberlik eden Sokratik bir öğretmen olarak hizmet edebilir ve rutin sorguları ele alarak öğretmenlerin zamanını serbest bırakabilir." data-en="AGI could personalize learning experiences for every student in real time, serving as a Socratic tutor that guides students through problems and frees up teachers' time by handling routine queries.">AGI, her öğrenci için gerçek zamanlı olarak öğrenme deneyimlerini kişiselleştirebilir. Öğrencileri problemler boyunca rehberlik eden Sokratik bir öğretmen olarak hizmet edebilir ve rutin sorguları ele alarak öğretmenlerin zamanını serbest bırakabilir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-atom"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Bilim ve Teknoloji" data-en="Science and Technology">Bilim ve Teknoloji</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, şu anda insan yeteneklerinin ötesindeki karmaşık problemleri çözebilir, bilimsel keşfi hızlandırabilir ve olasılık sınırlarını değiştirebilir. Kendi ilerlemesini hızlandırma kabiliyetine sahip bir AGI, büyük değişikliklerin şaşırtıcı derecede hızlı gerçekleşmesine neden olabilir." data-en="AGI could solve complex problems currently beyond human capabilities, accelerating scientific discovery and changing the limits of possibility. An AGI capable of accelerating its own progress could cause major changes to happen surprisingly quickly.">AGI, şu anda insan yeteneklerinin ötesindeki karmaşık problemleri çözebilir, bilimsel keşfi hızlandırabilir ve olasılık sınırlarını değiştirebilir. Kendi ilerlemesini hızlandırma kabiliyetine sahip bir AGI, büyük değişikliklerin şaşırtıcı derecede hızlı gerçekleşmesine neden olabilir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="İklim Değişikliği" data-en="Climate Change">İklim Değişikliği</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AI, iklim adaptasyonu ve azaltımında yardımcı olur, akıllı şebekeleri optimize eder, yenilenebilir enerji çıktısını tahmin eder ve atığı azaltır. AGI bu yetenekleri sürekli çevresel izleme ve politika tasarımına genelleştirebilir." data-en="AI assists in climate adaptation and mitigation, optimizing smart grids, forecasting renewable energy output, and reducing waste. AGI could generalize these capabilities to ongoing environmental monitoring and policy design.">AI, iklim adaptasyonu ve azaltımında yardımcı olur, akıllı şebekeleri optimize eder, yenilenebilir enerji çıktısını tahmin eder ve atığı azaltır. AGI bu yetenekleri sürekli çevresel izleme ve politika tasarımına genelleştirebilir.</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 4rem;">
+            <h3 style="font-size: 2rem; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2rem;">
+                <span data-tr="Derin Riskler ve Zorluklar" data-en="Profound Risks and Challenges">Derin Riskler ve Zorluklar</span>
+            </h3>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-skull-crossbones"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Varoluşsal Riskler" data-en="Existential Risks">Varoluşsal Riskler</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI'deki önemli ilerleme insan soyu tükenme veya geri döndürülemez küresel felakete yol açabilir. Endişeler arasında AGI'nin insan kontrolünden çıkması, güvenli olmayan hedefler geliştirmesi veya kötü etik, ahlak ve değerlere sahip olması yer alır." data-en="Substantial progress in AGI could lead to human extinction or irreversible global catastrophe. Concerns include AGI removing itself from human control, developing unsafe goals, or having poor ethics, morals, and values.">AGI'deki önemli ilerleme insan soyu tükenme veya geri döndürülemez küresel felakete yol açabilir. Endişeler arasında AGI'nin insan kontrolünden çıkması, güvenli olmayan hedefler geliştirmesi veya kötü etik, ahlak ve değerlere sahip olması yer alır.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-industry"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Sosyo-Ekonomik Yıkımlar" data-en="Socio-Economic Disruptions">Sosyo-Ekonomik Yıkımlar</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI, endüstriler boyunca yaygın iş otomasyonuna yol açabilir, geleneksel istihdamı geçersiz kılabilir ve ekonomik sistemlerin köklü bir şekilde yeniden yapılandırılmasını gerektirebilir. AGI'nin faydaları birkaç elde veya zengin ülkelerde konsantre olursa, eşitsizliği artırabilir." data-en="AGI could lead to widespread job automation across industries, rendering traditional employment obsolete and necessitating a radical restructuring of economic systems. If AGI's benefits are concentrated in a few hands or wealthy nations, it could widen inequality.">AGI, endüstriler boyunca yaygın iş otomasyonuna yol açabilir, geleneksel istihdamı geçersiz kılabilir ve ekonomik sistemlerin köklü bir şekilde yeniden yapılandırılmasını gerektirebilir. AGI'nin faydaları birkaç elde veya zengin ülkelerde konsantre olursa, eşitsizliği artırabilir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Etik ve Yönetişim Endişeleri" data-en="Ethical and Governance Concerns">Etik ve Yönetişim Endişeleri</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI ilerledikçe etik riskleri yükselir. Başlıca endişeler arasında algoritmik kararlarda önyargı ve adalet, AGI'nin kötüye kullanılması veya silahlaştırılması, hacklenme veya haydut sistemlerden güvenlik yer alır. Mevcut düzenleyici çerçeveler bu riskleri ele almak için yetersiz olabilir." data-en="As AGI advances, ethical stakes rise. Major concerns include bias and fairness in algorithmic decisions, misuse or weaponization of AGI, and security from hacking or rogue systems. Current regulatory frameworks may be inadequate for addressing these risks.">AGI ilerledikçe etik riskleri yükselir. Başlıca endişeler arasında algoritmik kararlarda önyargı ve adalet, AGI'nin kötüye kullanılması veya silahlaştırılması, hacklenme veya haydut sistemlerden güvenlik yer alır. Mevcut düzenleyici çerçeveler bu riskleri ele almak için yetersiz olabilir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Güvenli Tasarım Zorluğu" data-en="Difficulty of Safe Design">Güvenli Tasarım Zorluğu</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Kusursuz bir AGI sistemi tasarlamak son derece zordur. Uygulamalar başlangıçta fark edilmeyen ancak sonradan felaketle sonuçlanan hatalar içerebilir. Büyük, akıllı modellerin iç yapılarını analiz etmek ve davranışlarını yorumlamak son derece zorlu olabilir." data-en="Designing a flawless AGI system is exceedingly difficult. Implementations may contain initially unnoticed but subsequently catastrophic bugs. Analyzing the internals and interpreting the behavior of large, intelligent models can be extremely challenging.">Kusursuz bir AGI sistemi tasarlamak son derece zordur. Uygulamalar başlangıçta fark edilmeyen ancak sonradan felaketle sonuçlanan hatalar içerebilir. Büyük, akıllı modellerin iç yapılarını analiz etmek ve davranışlarını yorumlamak son derece zorlu olabilir.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations -->
+    <section id="recommendations" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="Geleceğe Doğru: Öneriler ve Stratejik Odak" data-en="Navigating the Future: Recommendations and Strategic Focus">Geleceğe Doğru: Öneriler ve Stratejik Odak</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Yapay Genel Zeka'nın karmaşık manzarasında gezinmek, hırsı dikkatliliğle, yeniliği sorumlulukla dengeleyen stratejik, çok yönlü bir yaklaşım gerektirir" data-en="Navigating the complex landscape of Artificial General Intelligence requires a strategic, multi-faceted approach that balances ambition with caution, and innovation with responsibility">Yapay Genel Zeka'nın karmaşık manzarasında gezinmek, hırsı dikkatliliğle, yeniliği sorumlulukla dengeleyen stratejik, çok yönlü bir yaklaşım gerektirir</span>
+            </p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Fonksiyonel AI Gelişimine Öncelik Verin" data-en="Prioritize Functional AI Development">Fonksiyonel AI Gelişimine Öncelik Verin</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI'nin soyut arayışıyla yalnızca yönlendirilmek yerine, odak açık, ölçülebilir işlevsellik ve gerçek dünya faydasını gösteren Dar Yapay Zeka (ANI) sistemlerini geliştirme ve iyileştirme üzerinde kalmalıdır." data-en="Instead of being solely driven by the abstract pursuit of AGI, the focus should remain on developing and improving Artificial Narrow Intelligence (ANI) systems that demonstrate clear, measurable functionality and real-world utility.">AGI'nin soyut arayışıyla yalnızca yönlendirilmek yerine, odak açık, ölçülebilir işlevsellik ve gerçek dünya faydasını gösteren Dar Yapay Zeka (ANI) sistemlerini geliştirme ve iyileştirme üzerinde kalmalıdır.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Sorumlu AI'ye Yatırım Yapın" data-en="Invest in Responsible AI">Sorumlu AI'ye Yatırım Yapın</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AI yetenekleri ilerledikçe, bu sistemlerin sorumlu geliştirilmesi ve dağıtılması büyük önem kazanır. Bu, sağlam etik yönergeler oluşturmayı, AI karar vermede şeffaflık sağlamayı ve kapsamlı güvenlik önlemleri geliştirmeyi gerektirir." data-en="As AI capabilities advance, the responsible development and deployment of these systems become paramount. This requires establishing robust ethical guidelines, ensuring transparency in AI decision-making, and developing comprehensive safety measures.">AI yetenekleri ilerledikçe, bu sistemlerin sorumlu geliştirilmesi ve dağıtılması büyük önem kazanır. Bu, sağlam etik yönergeler oluşturmayı, AI karar vermede şeffaflık sağlamayı ve kapsamlı güvenlik önlemleri geliştirmeyi gerektirir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Disiplinler Arası İşbirliğini Teşvik Edin" data-en="Foster Interdisciplinary Collaboration">Disiplinler Arası İşbirliğini Teşvik Edin</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI'yi başarmak veya hatta gelişmiş ANI'yi güvenli bir şekilde yönetmek, çeşitli alanlar arasında işbirliği gerektirir. Bilgisayar bilimi, sinirbilim, bilişsel psikoloji, etik ve politika yapıcılığı zeka karmaşıklıklarını anlamak için birlikte çalışmalıdır." data-en="Achieving AGI, or even safely managing advanced ANI, necessitates collaboration across diverse fields. Computer science, neuroscience, cognitive psychology, ethics, and policy-making must work in concert to understand the complexities of intelligence.">AGI'yi başarmak veya hatta gelişmiş ANI'yi güvenli bir şekilde yönetmek, çeşitli alanlar arasında işbirliği gerektirir. Bilgisayar bilimi, sinirbilim, bilişsel psikoloji, etik ve politika yapıcılığı zeka karmaşıklıklarını anlamak için birlikte çalışmalıdır.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Sağlam Değerlendirme Çerçeveleri Geliştirin" data-en="Develop Robust Evaluation Frameworks">Sağlam Değerlendirme Çerçeveleri Geliştirin</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Mevcut kıyaslama ölçütleri faydalı olsa da, iyi kapsamlı, algoritmik olarak puanlanabilir görevlere odaklanmaları nedeniyle gerçek dünya senaryolarında AI yeteneklerini genellikle abartırlar. Turing Testi gibi yüzeysel ölçütlerin ötesine geçen daha kapsamlı değerlendirme yöntemlerine kritik ihtiyaç vardır." data-en="Current benchmarks, while useful, often overestimate AI capabilities in real-world scenarios due to their focus on well-scoped, algorithmically scorable tasks. There is a critical need to develop more comprehensive evaluation methods that go beyond superficial metrics like the Turing Test.">Mevcut kıyaslama ölçütleri faydalı olsa da, iyi kapsamlı, algoritmik olarak puanlanabilir görevlere odaklanmaları nedeniyle gerçek dünya senaryolarında AI yeteneklerini genellikle abartırlar. Turing Testi gibi yüzeysel ölçütlerin ötesine geçen daha kapsamlı değerlendirme yöntemlerine kritik ihtiyaç vardır.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-balance-scale"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Proaktif Politika ve Yönetişim" data-en="Proactive Policy and Governance">Proaktif Politika ve Yönetişim</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Hükümetler ve uluslararası kuruluşlar AI için proaktif politika ve yönetişim çerçeveleri oluşturmada artan aciliyet göstermelidir. Bu, şeffaflık, güvenilirlik ve diğer temel sorumlu AI ilkelerine odaklanan düzenlemeler geliştirmeyi içerir." data-en="Governments and international organizations must show increased urgency in establishing proactive policy and governance frameworks for AI. This includes developing regulations focused on transparency, trustworthiness, and other core responsible AI principles.">Hükümetler ve uluslararası kuruluşlar AI için proaktif politika ve yönetişim çerçeveleri oluşturmada artan aciliyet göstermelidir. Bu, şeffaflık, güvenilirlik ve diğer temel sorumlu AI ilkelerine odaklanan düzenlemeler geliştirmeyi içerir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Toplumsal Hazırlık ve Eğitim" data-en="Societal Preparedness and Education">Toplumsal Hazırlık ve Eğitim</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="AGI'nin işi ve toplumu yeniden şekillendirme potansiyeli proaktif toplumsal hazırlığı gerektirir. Bu, beceri geliştirme girişimleri yoluyla potansiyel iş değişimi için planlamayı ve insan işini değiştirmek yerine artıran yeni iş kategorilerinin yaratılmasını teşvik etmeyi içerir." data-en="The potential for AGI to reshape work and society necessitates proactive societal preparedness. This involves planning for potential job displacement through upskilling initiatives and fostering the creation of new job categories that augment, rather than replace, human work.">AGI'nin işi ve toplumu yeniden şekillendirme potansiyeli proaktif toplumsal hazırlığı gerektirir. Bu, beceri geliştirme girişimleri yoluyla potansiyel iş değişimi için planlamayı ve insan işini değiştirmek yerine artıran yeni iş kategorilerinin yaratılmasını teşvik etmeyi içerir.</span>
+                </p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 class="card-title">
+                    <span data-tr="Dengeli Bir Perspektif Koruyun" data-en="Maintain a Balanced Perspective">Dengeli Bir Perspektif Koruyun</span>
+                </h3>
+                <p class="card-description">
+                    <span data-tr="Tüm paydaşlar için hype'ı gerçekçilikle karşı koymak, AGI'nin doğası hakkında sonsuz soyut tartışmalara girmek yerine AI'nin gösterilebilir işlevselliğine odaklanmak hayati önemdedir. Bu dengeli perspektif, AI'den somut, faydalı sonuçlar elde etmeye yönelik daha pragmatik kaynak ve çaba tahsisine olanak tanır." data-en="It is vital for all stakeholders to counter hype with realism, focusing on the demonstrable functionality of AI rather than engaging in endless abstract debates about AGI's nature. This balanced perspective allows for a more pragmatic allocation of resources and efforts towards achieving tangible, beneficial outcomes from AI.">Tüm paydaşlar için hype'ı gerçekçilikle karşı koymak, AGI'nin doğası hakkında sonsuz soyut tartışmalara girmek yerine AI'nin gösterilebilir işlevselliğine odaklanmak hayati önemdedir. Bu dengeli perspektif, AI'den somut, faydalı sonuçlar elde etmeye yönelik daha pragmatik kaynak ve çaba tahsisine olanak tanır.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- References -->
+    <section id="references" class="section">
+        <div class="section-header">
+            <h2 class="section-title">
+                <span data-tr="Derinlemesine Kaynaklar ve İleri Okuma" data-en="Comprehensive Sources and Further Reading">Derinlemesine Kaynaklar ve İleri Okuma</span>
+            </h2>
+            <p class="section-description">
+                <span data-tr="Bu portalın hazırlanmasında faydalanılan, alandaki en güncel, güvenilir ve değerli kaynaklar aşağıda titizlikle listelenmiştir. Konuyu daha derinlemesine incelemek, bilimsel argümanları ve güncel gelişmeleri takip etmek için bu referansları kullanabilirsiniz." data-en="The most current, reliable, and valuable sources in the field that were used in preparing this portal are meticulously listed below. You can use these references to examine the topic more deeply and follow scientific arguments and current developments.">Bu portalın hazırlanmasında faydalanılan, alandaki en güncel, güvenilir ve değerli kaynaklar aşağıda titizlikle listelenmiştir. Konuyu daha derinlemesine incelemek, bilimsel argümanları ve güncel gelişmeleri takip etmek için bu referansları kullanabilirsiniz.</span>
+            </p>
+        </div>
+
+        <div class="references-grid">
+            <div class="reference-item">
+                <a href="https://medium.com/@ayhanbzkrt/ajan-temelli-yapay-zek%C3%A2-agentic-ai-yard%C4%B1mc%C4%B1-pilottan-otomatik-u%C3%A7u%C5%9Fa-ge%C3%A7i%C5%9F-239fc4cb5e0a" class="reference-link" target="_blank">
+                    <span data-tr="Ayhan Bozkurt - Ajan Temelli Yapay Zekâ (Agentic AI): Yardımcı Pilot'tan Otomatik Uçuşa Geçiş" data-en="Ayhan Bozkurt - Agent-Based Artificial Intelligence (Agentic AI): Transition from Co-pilot to Autopilot">Ayhan Bozkurt - Ajan Temelli Yapay Zekâ (Agentic AI): Yardımcı Pilot'tan Otomatik Uçuşa Geçiş</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="YGZ'ye giden yolda önemli bir adım olan 'agentic AI' kavramını derinlemesine açıklar ve geleceğe ışık tutar." data-en="Deeply explains the concept of 'agentic AI', an important step on the road to AGI, and sheds light on the future.">YGZ'ye giden yolda önemli bir adım olan "agentic AI" kavramını derinlemesine açıklar ve geleceğe ışık tutar.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://medium.com/@ayhanbzkrt/yapay-zeka-devrimi-ge%C3%A7mi%C5%9F-be%C5%9F-y%C4%B1l%C4%B1n-de%C4%9Ferlendirmesi-ve-%C3%B6n%C3%BCm%C3%BCzdeki-be%C5%9F-y%C4%B1l%C4%B1n-%C3%B6ng%C3%B6r%C3%BCleri-ff90be0a260a" class="reference-link" target="_blank">
+                    <span data-tr="Ayhan Bozkurt - Yapay Zeka Devrimi: Geçmiş Beş Yılın Değerlendirmesi ve Önümüzdeki Beş Yılın Öngörüleri" data-en="Ayhan Bozkurt - The AI Revolution: Assessment of the Past Five Years and Predictions for the Next Five Years">Ayhan Bozkurt - Yapay Zeka Devrimi: Geçmiş Beş Yılın Değerlendirmesi ve Önümüzdeki Beş Yılın Öngörüleri</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="YZ'nin geçmiş beş yılını eleştirel bir gözle değerlendirir ve gelecek beş yıla dair çarpıcı öngörüler sunar." data-en="Critically evaluates the past five years of AI and offers striking predictions for the next five years.">YZ'nin geçmiş beş yılını eleştirel bir gözle değerlendirir ve gelecek beş yıla dair çarpıcı öngörüler sunar.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" class="reference-link" target="_blank">
+                    <span data-tr="Wikipedia - Artificial General Intelligence" data-en="Wikipedia - Artificial General Intelligence">Wikipedia - Artificial General Intelligence</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="YGZ hakkında temel ve geniş kapsamlı, akademik referanslara dayalı bir giriş sağlar." data-en="Provides a basic and comprehensive introduction to AGI based on academic references.">YGZ hakkında temel ve geniş kapsamlı, akademik referanslara dayalı bir giriş sağlar.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://builtin.com/artificial-intelligence/strong-ai-weak-ai" class="reference-link" target="_blank">
+                    <span data-tr="Built In - Strong AI vs. Weak AI" data-en="Built In - Strong AI vs. Weak AI">Built In - Strong AI vs. Weak AI</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="Dar ve Genel Yapay Zeka arasındaki temel ve işlevsel farkları açıklar, kavramsal netlik sağlar." data-en="Explains the fundamental and functional differences between Narrow and General Artificial Intelligence, providing conceptual clarity.">Dar ve Genel Yapay Zeka arasındaki temel ve işlevsel farkları açıklar, kavramsal netlik sağlar.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://hai.stanford.edu/ai-index/2025-ai-index-report" class="reference-link" target="_blank">
+                    <span data-tr="Stanford HAI - 2025 AI Index Report" data-en="Stanford HAI - 2025 AI Index Report">Stanford HAI - 2025 AI Index Report</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="Yapay zeka alanındaki son gelişmeler, eğilimler, yatırımlar ve etik tartışmalar hakkında yıllık kapsamlı bir rapor." data-en="An annual comprehensive report on recent developments, trends, investments and ethical discussions in the field of artificial intelligence.">Yapay zeka alanındaki son gelişmeler, eğilimler, yatırımlar ve etik tartışmalar hakkında yıllık kapsamlı bir rapor.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://openai.com/index/planning-for-agi-and-beyond/" class="reference-link" target="_blank">
+                    <span data-tr="OpenAI - Planning for AGI and Beyond" data-en="OpenAI - Planning for AGI and Beyond">OpenAI - Planning for AGI and Beyond</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="OpenAI'nin YGZ'ye yönelik uzun vadeli stratejileri ve güvenlik yaklaşımları." data-en="OpenAI's long-term strategies and security approaches towards AGI.">OpenAI'nin YGZ'ye yönelik uzun vadeli stratejileri ve güvenlik yaklaşımları.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://www.techpolicy.press/most-researchers-do-not-believe-agi-is-imminent-why-do-policymakers-act-otherwise/" class="reference-link" target="_blank">
+                    <span data-tr="Tech Policy Press - Most Researchers Do Not Believe AGI Is Imminent" data-en="Tech Policy Press - Most Researchers Do Not Believe AGI Is Imminent">Tech Policy Press - Most Researchers Do Not Believe AGI Is Imminent</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="Araştırmacıların ve politika yapıcıların YGZ algılarındaki farklılıkları ve bunun olası sonuçlarını inceler." data-en="Examines differences in AGI perceptions between researchers and policymakers and their possible consequences.">Araştırmacıların ve politika yapıcıların YGZ algılarındaki farklılıkları ve bunun olası sonuçlarını inceler.</span>
+                </p>
+            </div>
+
+            <div class="reference-item">
+                <a href="https://research.ibm.com/topics/neuro-symbolic-ai" class="reference-link" target="_blank">
+                    <span data-tr="IBM Research - Neuro-symbolic AI" data-en="IBM Research - Neuro-symbolic AI">IBM Research - Neuro-symbolic AI</span>
+                </a>
+                <p class="reference-description">
+                    <span data-tr="Nöro-sembolik YZ yaklaşımı hakkında IBM'in araştırma ve görüşleri." data-en="IBM's research and views on the neuro-symbolic AI approach.">Nöro-sembolik YZ yaklaşımı hakkında IBM'in araştırma ve görüşleri.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-title">
+                <span data-tr="© 2025 Yapay Zeka Geleceği Analizi. Tüm Hakları Saklıdır." data-en="© 2025 AI Future Analysis. All Rights Reserved.">© 2025 Yapay Zeka Geleceği Analizi. Tüm Hakları Saklıdır.</span>
+            </p>
+            <p class="footer-description">
+                <span data-tr="Bu interaktif portal, 'The Future of Artificial General Intelligence: Hype vs. Reality' raporundaki derinlemesine bilgileri, geleceğe dair bir bakış açısı sunmak amacıyla özel olarak tasarlanmıştır." data-en="This interactive portal has been specially designed to provide insights into the future, based on the in-depth information in 'The Future of Artificial General Intelligence: Hype vs. Reality' report.">Bu interaktif portal, "The Future of Artificial General Intelligence: Hype vs. Reality" raporundaki derinlemesine bilgileri, geleceğe dair bir bakış açısı sunmak amacıyla özel olarak tasarlanmıştır.</span>
+            </p>
+            <p class="footer-author">
+                <span data-tr="Hazırlayan:" data-en="Prepared by:">Hazırlayan:</span> 
+                <a href="https://www.linkedin.com/in/ayhanbozkurt/" target="_blank">Ayhan Bozkurt</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentLanguage = 'tr';
+        let isDarkTheme = true;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hide');
+            }, 1500);
+
+            // Setup event listeners
+            setupEventListeners();
+            
+            // Initialize scroll animations
+            setupScrollAnimations();
+            
+            // Initialize progress bar
+            setupProgressBar();
+            
+            // Set initial language
+            updateLanguage();
+        }
+
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Language toggle
+            document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+            
+            // Mobile menu toggle
+            document.getElementById('mobileToggle').addEventListener('click', toggleMobileMenu);
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // Update active nav link
+                        updateActiveNavLink(this);
+                        
+                        // Close mobile menu if open
+                        document.getElementById('navMenu').classList.remove('active');
+                    }
+                });
+            });
+
+            // CTA buttons smooth scrolling
+            document.querySelectorAll('.btn[href^="#"]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            const body = document.body;
+            const themeIcon = document.querySelector('#themeToggle i');
+            
+            if (isDarkTheme) {
+                body.classList.remove('light-theme');
+                themeIcon.className = 'fas fa-moon';
+            } else {
+                body.classList.add('light-theme');
+                themeIcon.className = 'fas fa-sun';
+            }
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'tr' ? 'en' : 'tr';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const langText = document.getElementById('langText');
+            langText.textContent = currentLanguage === 'tr' ? 'EN' : 'TR';
+            
+            // Update all translatable elements
+            const translatableElements = document.querySelectorAll('[data-tr][data-en]');
+            translatableElements.forEach(element => {
+                const text = currentLanguage === 'tr' ? element.dataset.tr : element.dataset.en;
+                element.textContent = text;
+            });
+        }
+
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const mobileToggle = document.getElementById('mobileToggle');
+            
+            navMenu.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+        }
+
+        function updateActiveNavLink(activeLink) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to clicked link
+            activeLink.classList.add('active');
+        }
+
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections and timeline items
+            document.querySelectorAll('.section, .timeline-item').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Update active navigation based on scroll
+            const navObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        const correspondingNavLink = document.querySelector(`[href="#${id}"]`);
+                        if (correspondingNavLink) {
+                            updateActiveNavLink(correspondingNavLink);
+                        }
+                    }
+                });
+            }, {
+                threshold: 0.5,
+                rootMargin: '0px 0px -50% 0px'
+            });
+
+            // Observe main sections for navigation updates
+            document.querySelectorAll('section[id]').forEach(section => {
+                navObserver.observe(section);
+            });
+        }
+
+        function setupProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            
+            window.addEventListener('scroll', () => {
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollPercent = (scrollTop / (documentHeight - windowHeight)) * 100;
+                
+                progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+            });
+        }
+
+        // Navbar background change on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = isDarkTheme ? 
+                    'rgba(15, 23, 42, 0.95)' : 
+                    'rgba(255, 255, 255, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click animation to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.6);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const rate = scrolled * -0.5;
+            
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+
+        // Add typing effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typing effect when page loads
+        setTimeout(() => {
+            const heroTitle = document.querySelector('.hero-title span');
+            if (heroTitle) {
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 80);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
