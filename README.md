@@ -1,7 +1,5 @@
 # AGI Geleceği: Hayal vs Gerçeklik - İnteraktif Portal
 
-![AGI Portal Banner](https://via.placeholder.com/1200x400.png?text=AGI+Geleceği:+Hayal+vs+Gerçeklik)
-*(Buraya projenizin görselini veya bir ekran görüntüsünü ekleyebilirsiniz)*
 
 Bu interaktif portal, **Yapay Genel Zeka'nın (AGI)** mevcut durumunu, gelecekteki potansiyelini ve toplumsal etkilerini kapsamlı bir şekilde analiz eder. Bilimsel gerçekler ışığında, popüler algı ile gerçekliği ayırarak geleceğe dair objektif bir bakış açısı sunmayı amaçlar.
 
